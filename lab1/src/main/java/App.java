@@ -1,8 +1,6 @@
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-
 import java.io.IOException;
 
-public class Main {
+public class App {
     public static void main(String[] args) throws IOException {
         Methods methods = new Methods();
         Input input = new Input();

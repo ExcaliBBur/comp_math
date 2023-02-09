@@ -77,7 +77,7 @@ public class Input {
     public double[][] inputFileMatrix() throws IOException {
         File file = new File(fileName);
         double[][] matrix;
-        if (!file.exists()) {
+        while (!file.exists()) {
             System.out.println("Такого файла не существует :( Пробуем считать название заново");
             setInputFileName(getInputFileName());
             file = new File(fileName);

@@ -1,4 +1,3 @@
-
 public class Methods {
     private final double epsilon = 0.00000001d;
 
