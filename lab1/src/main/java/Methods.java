@@ -12,11 +12,11 @@ public class Methods {
                     pointer = j;
                 }
             }
-            System.out.printf("Максимальный по модулю элемент " + (i + 1) + " столбца равен %.2f \n", max);
             if (Math.abs(max) <= epsilon) {
-                System.out.println("Максимальный элемент слишком мал, система имеет бесконечное число решений");
+                System.out.println("Максимальный элемент слишком мал, метод Гаусса не подходит.");
                 return null;
             }
+            System.out.printf("Максимальный по модулю элемент " + (i + 1) + " столбца равен %.2f \n", max);
 
             double[] tmp = userMatrix[i];
             if (pointer != i) {
@@ -33,8 +33,10 @@ public class Methods {
                     userMatrix[j][k] = userMatrix[i][k] * koeff - userMatrix[j][k];
                 }
             }
-            System.out.println("Матрица после преобразования");
-            printMatrix(userMatrix, i);
+            if (i != userMatrix.length - 2) {
+                System.out.println("Матрица после преобразования");
+                printMatrix(userMatrix, i);
+            }
             System.out.println();
         }
         return userMatrix;
