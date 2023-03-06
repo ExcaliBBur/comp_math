@@ -29,5 +29,6 @@ while (True):
     x_0 = x_1
     x_1 = x_2
     counter += 1
-    
+print("Метод секущих:")
 print(table)
+print("x = ", x_2)

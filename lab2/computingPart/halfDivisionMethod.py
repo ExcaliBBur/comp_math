@@ -34,4 +34,6 @@ while (True):
         break
     counter += 1
     table.add_row(row)
+print("Метод половинного деления:")
 print(table)
+print("x = ", x)

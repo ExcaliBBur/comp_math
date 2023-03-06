@@ -11,7 +11,7 @@ def phi(x):
 def digitsAfterPoint(number):
     if (str(number).find(".") == -1):
         return number
-    digitsAfter = 8                                               # TODO: при сдаче поменять на 3
+    digitsAfter = 3                                               # TODO: при сдаче поменять на 3
     number = str(number).split(".")
     return number[0] + "." + number[1][:digitsAfter]
 
@@ -20,6 +20,7 @@ table = [['№ итерации', 'x_(i)', 'x_(i+1)', 'phi(x_(i+1))', 'F(x_(i+1)
 table = PrettyTable(table[0])
 epsilon = 0.01
 counter = 0
+x_1 = 0
 while (True):
     x_1 = phi(x_0)
     row = [digitsAfterPoint(counter), digitsAfterPoint(x_0), digitsAfterPoint(x_1), digitsAfterPoint(phi(x_1)), 
@@ -29,5 +30,6 @@ while (True):
     if (abs(x_0 - x_1) <= epsilon):
         break
     x_0 = x_1
-
+print("Метод простой итерации:")
 print(table)
+print("x = ", x_1)

@@ -3,6 +3,10 @@ from sympy import *
 from prettytable import PrettyTable
 from matplotlib import pyplot as plt
 import sys
+import seaborn as sns
+
+sns.set()
+sns.set_style("whitegrid", {'grid.linestyle': '--'})
 
 inputType = 0
 numberOfEquation = 0
@@ -88,7 +92,7 @@ def printAnswer(table, root):
         print("x = ", root)
 
 
-def getPlot():
+def getPlot(coordX):
     plot_range = [ii/100 for ii in np.arange((a - 1)*100, (b + 1)*100)]
     y = [equation.subs(x, ii) for ii in plot_range]
     plt.plot(plot_range, y)
@@ -96,6 +100,7 @@ def getPlot():
     plt.ylabel(r'$f(x)$')
     plt.title(r'График функции на заданном интервале')
     plt.grid(True)
+    plt.scatter(coordX,0)
     plt.show()
 
 
@@ -280,7 +285,7 @@ def simpleIterationMethod():
             break
         x_0 = x_1
     printAnswer(table, x_1)
-    getPlot()
+    getPlot(x_1)
 
 
 def newtonMethod():
@@ -306,7 +311,7 @@ def newtonMethod():
             break
         x_0 = x_1
     printAnswer(table, x_1)
-    getPlot()
+    getPlot(x_1)
 
 
 def chordMethod():
@@ -332,7 +337,7 @@ def chordMethod():
         else:
             a_0 = x_0
     printAnswer(table, x_0)
-    getPlot()
+    getPlot(x_0)
 
 
 def startComputing():
