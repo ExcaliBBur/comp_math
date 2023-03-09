@@ -161,7 +161,7 @@ def getInputDataFromFile():
             print("Выбран интервал от ", a, " до ", b)
 
             roots = checkQuantityOfRoots()
-            if (roots > 1):
+            if (roots > 1 or roots == 0):
                 print("\nНа введённом интервале содержится",
                       roots, "корней, завершаю программу\n")
                 sys.exit(0)
@@ -229,7 +229,7 @@ def getInputDataFromConsole():
 
             if (a == b):
                 print("\nГраницы интервала совпадают, так делать нельзя.\n")
-            elif (roots > 1):
+            elif (roots > 1 or roots == 0):
                 print("\nНа введённом интервале содержится", roots, "корней\n")
             else:
                 break
