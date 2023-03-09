@@ -115,7 +115,7 @@ def newtonMethod():
         y_1 = y_0 + solutions[1]
         counter += 1
 
-        if (abs(x_1 - x_0) <= epsilon or abs(y_1 - y_0) <= epsilon):
+        if (abs(x_1 - x_0) <= epsilon and abs(y_1 - y_0) <= epsilon):
             break
 
         x_0 = x_1
