@@ -1,0 +1,12 @@
+expression\Expression.class
+methods\RightRectangleMethod.class
+Main.class
+methods\SimpsonMethod.class
+methods\MidRectangleMethod.class
+methods\TrapezoidalMethod.class
+methods\RungeRule.class
+IOlibrary\Input.class
+methods\Method.class
+methods\LeftRectangleMethod.class
+expression\FuncExpression.class
+expression\Result.class
