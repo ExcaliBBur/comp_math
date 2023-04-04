@@ -27,6 +27,10 @@ public class LeftRectangleMethod implements Method {
                 ptr += h;
             }
             res1 *= h;
+            if (Double.isInfinite(res1) || Double.isNaN(res1) || Math.abs(res1) >= 10000) {
+                System.out.println("Интеграл не существует.");
+                return null;
+            }
             ptr = 0;
             for (int i = 1; i <= 2 * n; i++) {
                 res2 += expression.F().calculate(left + ptr);

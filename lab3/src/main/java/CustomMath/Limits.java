@@ -1,6 +1,5 @@
 package CustomMath;
 
-import exceptions.NoLimitException;
 import expression.Expression;
 
 import java.text.DecimalFormat;
@@ -17,7 +16,6 @@ public class Limits {
 
         do {
             prev = eval;
-//            eval = expression.Integral().calculate(round);
             eval = expression.F().calculate(round);
             round = x - (0.1 / Math.pow(10, k++));
         } while (Math.abs(eval - prev) >= EPSILON && !Double.isNaN(eval) && k != PRECISION);
@@ -33,7 +31,6 @@ public class Limits {
 
         do {
             prev = eval;
-//            eval = expression.Integral().calculate(round);
             eval = expression.F().calculate(round);
             round = x + (0.1 / Math.pow(10, k++));
         } while (Math.abs(eval - prev) >= EPSILON && !Double.isNaN(eval) && k != PRECISION);
@@ -41,21 +38,24 @@ public class Limits {
         return Double.isFinite(eval) ? eval : null;
     }
 
-    public static void limit(Expression expression, double x, String msg)
-            throws NoLimitException {
+    public static Double limit(Expression expression, double x, String msg) {
         Double left = leftLimit(expression, x);
         Double right = rightLimit(expression, x);
         if (left == null || right == null) {
-            throw new NoLimitException(msg);
+            System.out.println(msg);
+            return null;
         }
+        return Double.isFinite(left) ? left : null;
     }
 
-    public static void limitOnInterval(Expression expression, double left, double right)
-            throws NoLimitException {
+    public static Double limitOnInterval(Expression expression, double left, double right) {
         DecimalFormat df = new DecimalFormat("#.##");
         for (double i = left + 0.01; i < right; i += 0.01) {
-            limit(expression, Double.parseDouble(df.format(i).replace(",", ".")),
-                    "Функция терпит разрыв на интервале в точке " + df.format(i));
+            if (limit(expression, Double.parseDouble(df.format(i).replace(",", ".")),
+                    "Функция терпит разрыв на интервале в точке " + df.format(i)) == null)
+                return Double.parseDouble(df.format(i).replace(",", "."));
+
         }
+        return null;
     }
 }

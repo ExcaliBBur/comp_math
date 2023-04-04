@@ -1,6 +1,7 @@
 import CustomMath.Limits;
 import IOlibrary.Input;
 import exceptions.NoLimitException;
+import expression.Answer;
 import expression.Expression;
 import expression.Result;
 import methods.*;
@@ -29,58 +30,33 @@ public class Main {
         double epsilon = input.getEpsilon();
 
         Expression expression = new Expression(numberOfExpression);
+        int modificationOfMethod = 0;
+        if (numberOfMethod == 1) modificationOfMethod = input.getModification();
 
-        try {
-            Limits.limit(expression, left, "Предела в точке A не существует");
-            Limits.limit(expression, right, "Предела в точке B не существует");
-            Limits.limitOnInterval(expression, left, right);
-        } catch (NoLimitException e) {
-            System.out.println(e.toString());
-            System.out.println("Интеграл не существует. Программа завершает свою работу");
-            System.exit(1);
+        Answer answer = new Answer(numberOfMethod, modificationOfMethod, left, right, n, epsilon, expression);
+        Result result = null;
+
+        if (Limits.limit(expression, left, "Предела в точке A не существует") == null) {
+            result = answer.getAnswerForBreaks(false);
         }
-
-        if (numberOfMethod == 1) {
-            int modificationOfMethod = input.getModification();
-            switch (modificationOfMethod) {
-                case (1) -> {
-                    LeftRectangleMethod leftRectangleMethod = new LeftRectangleMethod();
-                    Result res1 = leftRectangleMethod.compute(left, right, n, epsilon, expression);
-                    if (res1 != null)
-                        System.out.println("Метод левых треугольников отработал за " + res1.getN()
-                                + " разбиений с результатом " + res1.getRes());
-                }
-                case (2) -> {
-                    RightRectangleMethod rightRectangleMethod = new RightRectangleMethod();
-                    Result res2 = rightRectangleMethod.compute(left, right, n, epsilon, expression);
-                    if (res2 != null)
-                        System.out.println("Метод правых треугольников отработал за " + res2.getN()
-                                + " разбиений с результатом " + res2.getRes());
-                }
-                case (3) -> {
-                    MidRectangleMethod midRectangleMethod = new MidRectangleMethod();
-                    Result res3 = midRectangleMethod.compute(left, right, n, epsilon, expression);
-                    if (res3 != null)
-                        System.out.println("Метод средних треугольников отработал за " + res3.getN()
-                                + " разбиений с результатом " + res3.getRes());
+        else if (Limits.limit(expression, right, "Предела в точке B не существует") == null) {
+            result = answer.getAnswerForBreaks(true);
+        }
+        else {
+            Double dot = Limits.limitOnInterval(expression, left, right);
+            if (dot == null) {
+                result = answer.getAnswer(left, right);
+            }
+            else {
+                Result result1 = answer.getAnswer(left, dot - 0.00001);
+                Result result2 = answer.getAnswer(dot + 0.00001, right);
+                if (result1 != null && result2 != null) {
+                    result.setRes(result1.getRes() + result2.getRes());
+                    result.setN(result1.getN() + result2.getN());
                 }
             }
-        } else if (numberOfMethod == 2) {
-            TrapezoidalMethod trapezoidalMethod = new TrapezoidalMethod();
-
-            Result res = trapezoidalMethod.compute(left, right, n, epsilon, expression);
-
-            if (res != null)
-                System.out.println("Метод трапеций отработал за " + res.getN()
-                        + " разбиений с результатом " + res.getRes());
-        } else {
-            SimpsonMethod simpsonMethod = new SimpsonMethod();
-
-            Result res = simpsonMethod.compute(left, right, n, epsilon, expression);
-
-            if (res != null)
-                System.out.println("Метод Симпсона отработал за " + res.getN()
-                        + " разбиений с результатом " + res.getRes());
         }
+
+        if (result != null) answer.printAnswer(result);
     }
 }

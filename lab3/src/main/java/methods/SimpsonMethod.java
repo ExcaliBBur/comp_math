@@ -29,6 +29,10 @@ public class SimpsonMethod implements Method {
                 ptr += h;
             }
             res1 *= h / 3;
+            if (Double.isInfinite(res1) || Double.isNaN(res1) || Math.abs(res1) >= 10000) {
+                System.out.println("Интеграл не существует.");
+                return null;
+            }
             ptr = 0;
             for (int i = 1; i <= 2 * n - 1; i++) {
                 if (i % 2 != 0) res2 += 4 * expression.F().calculate(left + ptr);

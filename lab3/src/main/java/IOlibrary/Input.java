@@ -14,7 +14,7 @@ public class Input {
             try {
                 int number = Integer.parseInt(scanner.next());
                 if (!isMethod) {
-                    if (number < 1 || number > 5) throw new NumberFormatException();
+                    if (number < 1 || number > 6) throw new NumberFormatException();
                 } else {
                     if (number > 3 || number < 1) throw new NumberFormatException();
                 }
