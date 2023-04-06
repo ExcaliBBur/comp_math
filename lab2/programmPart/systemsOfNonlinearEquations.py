@@ -121,9 +121,12 @@ def newtonMethod():
         y_1 = y_0 + solutions[1]
         counter += 1
 
-        if (abs(x_1 - x_0) <= epsilon and abs(y_1 - y_0) <= epsilon):
+        if (abs(max(solutions[0], solutions[1])) <= epsilon or ((abs(x_1 - x_0) <= epsilon) and abs(y_1 - y_0) <= epsilon)):
             break
-
+        if (counter >= 200):
+            print("Метод не смог отработать за 200 итераций.")
+            sys.exit(0)
+        
         x_0 = x_1
         y_0 = y_1
 
