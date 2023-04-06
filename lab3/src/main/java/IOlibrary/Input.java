@@ -7,57 +7,57 @@ public class Input {
 
     public int getNumber(boolean isMethod) {
         while (true) {
-            if (!isMethod) System.out.print("Выберите номер определенного интеграла, который хотите вычислить: ");
+            if (!isMethod) System.out.print("Г‚Г»ГЎГҐГ°ГЁГІГҐ Г­Г®Г¬ГҐГ° Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­Г­Г®ГЈГ® ГЁГ­ГІГҐГЈГ°Г Г«Г , ГЄГ®ГІГ®Г°Г»Г© ГµГ®ГІГЁГІГҐ ГўГ»Г·ГЁГ±Г«ГЁГІГј: ");
             else {
-                System.out.print("\nВведите номер метода, который хотите использовать: ");
+                System.out.print("\nГ‚ГўГҐГ¤ГЁГІГҐ Г­Г®Г¬ГҐГ° Г¬ГҐГІГ®Г¤Г , ГЄГ®ГІГ®Г°Г»Г© ГµГ®ГІГЁГІГҐ ГЁГ±ГЇГ®Г«ГјГ§Г®ГўГ ГІГј: ");
             }
             try {
                 int number = Integer.parseInt(scanner.next());
                 if (!isMethod) {
-                    if (number < 1 || number > 6) throw new NumberFormatException();
+                    if (number < 1 || number > 5) throw new NumberFormatException();
                 } else {
                     if (number > 3 || number < 1) throw new NumberFormatException();
                 }
                 return number;
             } catch (NumberFormatException e) {
-                if (!isMethod) System.out.println("Введите число от 1 до 5");
-                else System.out.println("Введите число от 1 до 3");
+                if (!isMethod) System.out.println("Г‚ГўГҐГ¤ГЁГІГҐ Г·ГЁГ±Г«Г® Г®ГІ 1 Г¤Г® 5");
+                else System.out.println("Г‚ГўГҐГ¤ГЁГІГҐ Г·ГЁГ±Г«Г® Г®ГІ 1 Г¤Г® 3");
             }
         }
     }
 
     public int getModification() {
         while (true) {
-            System.out.print("\nВведите номер модификации, который хотите использовать: ");
+            System.out.print("\nГ‚ГўГҐГ¤ГЁГІГҐ Г­Г®Г¬ГҐГ° Г¬Г®Г¤ГЁГґГЁГЄГ Г¶ГЁГЁ, ГЄГ®ГІГ®Г°Г»Г© ГµГ®ГІГЁГІГҐ ГЁГ±ГЇГ®Г«ГјГ§Г®ГўГ ГІГј: ");
             try {
                 int number = Integer.parseInt(scanner.next());
                 if (number > 3 || number < 1) throw new NumberFormatException();
                 return number;
             } catch (NumberFormatException e) {
-                System.out.println("Введите число от 1 до 3");
+                System.out.println("Г‚ГўГҐГ¤ГЁГІГҐ Г·ГЁГ±Г«Г® Г®ГІ 1 Г¤Г® 3");
             }
         }
     }
 
     public double getBound(boolean isLower) {
         while (true) {
-            if (isLower) System.out.print("\nВведите нижний предел интегрирования: ");
-            else System.out.print("\nВведите верхний предел интегрирования: ");
+            if (isLower) System.out.print("\nГ‚ГўГҐГ¤ГЁГІГҐ Г­ГЁГ¦Г­ГЁГ© ГЇГ°ГҐГ¤ГҐГ« ГЁГ­ГІГҐГЈГ°ГЁГ°Г®ГўГ Г­ГЁГї: ");
+            else System.out.print("\nГ‚ГўГҐГ¤ГЁГІГҐ ГўГҐГ°ГµГ­ГЁГ© ГЇГ°ГҐГ¤ГҐГ« ГЁГ­ГІГҐГЈГ°ГЁГ°Г®ГўГ Г­ГЁГї: ");
             try {
                 return Double.parseDouble(scanner.next().replaceAll(",", "."));
             } catch (NumberFormatException e) {
-                System.out.println("Введите численную границу");
+                System.out.println("Г‚ГўГҐГ¤ГЁГІГҐ Г·ГЁГ±Г«ГҐГ­Г­ГіГѕ ГЈГ°Г Г­ГЁГ¶Гі");
             }
         }
     }
 
     public double getEpsilon() {
         while (true) {
-            System.out.print("Введите погрешность вычисления: ");
+            System.out.print("Г‚ГўГҐГ¤ГЁГІГҐ ГЇГ®ГЈГ°ГҐГёГ­Г®Г±ГІГј ГўГ»Г·ГЁГ±Г«ГҐГ­ГЁГї: ");
             try {
                 return Double.parseDouble(scanner.next().replaceAll(",", "."));
             } catch (NumberFormatException e) {
-                System.out.println("Введите численную погрешность");
+                System.out.println("Г‚ГўГҐГ¤ГЁГІГҐ Г·ГЁГ±Г«ГҐГ­Г­ГіГѕ ГЇГ®ГЈГ°ГҐГёГ­Г®Г±ГІГј");
             }
         }
     }
