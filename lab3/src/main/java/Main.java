@@ -23,9 +23,9 @@ public class Main {
         double left = input.getBound(true);
         double right = input.getBound(false);
 
-        System.out.println("\n1: Метод прямоугольников (3 модификации: левые, правые, средние)");
-        System.out.println("2: Метод трапеций");
-        System.out.println("3: Метод Симпсона");
+        System.out.println("\n1: РњРµС‚РѕРґ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРѕРІ (3 РјРѕРґРёС„РёРєР°С†РёРё: Р»РµРІС‹Рµ, РїСЂР°РІС‹Рµ, СЃСЂРµРґРЅРёРµ)");
+        System.out.println("2: РњРµС‚РѕРґ С‚СЂР°РїРµС†РёР№");
+        System.out.println("3: РњРµС‚РѕРґ РЎРёРјРїСЃРѕРЅР°");
         int numberOfMethod = input.getNumber(true);
         double epsilon = input.getEpsilon();
 
@@ -36,10 +36,10 @@ public class Main {
         Answer answer = new Answer(numberOfMethod, modificationOfMethod, left, right, n, epsilon, expression);
         Result result = null;
 
-        if (Limits.limit(expression, left, "Предела в точке A не существует") == null) {
+        if (Limits.limit(expression, left, "РџСЂРµРґРµР»Р° РІ С‚РѕС‡РєРµ Рђ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚") == null) {
             result = answer.getAnswerForBreaks(false);
         }
-        else if (Limits.limit(expression, right, "Предела в точке B не существует") == null) {
+        else if (Limits.limit(expression, right, "РџСЂРµРґРµР»Р° РІ С‚РѕС‡РєРµ Р’ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚") == null) {
             result = answer.getAnswerForBreaks(true);
         }
         else {

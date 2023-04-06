@@ -30,7 +30,7 @@ public class SimpsonMethod implements Method {
             }
             res1 *= h / 3;
             if (Double.isInfinite(res1) || Double.isNaN(res1) || Math.abs(res1) >= 10000) {
-                System.out.println("Интеграл не существует.");
+                System.out.println("РРЅС‚РµРіСЂР°Р» РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚.");
                 return null;
             }
             ptr = 0;
@@ -42,7 +42,7 @@ public class SimpsonMethod implements Method {
             res2 *= h_1 / 3;
             if (rule.isPerformed(res1, res2, k, epsilon)) break;
             else if (counter >= MAX_ITERATIONS) {
-                System.out.println("Метод Симпсона не смог отработать за " + MAX_ITERATIONS + " итераций");
+                System.out.println("РњРµС‚РѕРґ РЎРёРјРїСЃРѕРЅР° РЅРµ СЃРјРѕРі РѕС‚СЂР°Р±РѕС‚Р°С‚СЊ Р·Р° " + MAX_ITERATIONS + " РёС‚РµСЂР°С†РёР№");
                 return null;
             }
             n *= 2;

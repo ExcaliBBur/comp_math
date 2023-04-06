@@ -78,28 +78,28 @@ public class Answer {
             switch (modificationOfMethod) {
                 case (1) -> {
                     if (result != null)
-                        System.out.println("Метод левых треугольников отработал за " + result.getN()
-                                + " разбиений с результатом " + result.getRes());
+                        System.out.println("РњРµС‚РѕРґ Р»РµРІС‹С… РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРѕРІ РѕС‚СЂР°Р±РѕС‚Р°Р» Р·Р° " + result.getN()
+                                + " СЂР°Р·Р±РёРµРЅРёР№ СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј " + result.getRes());
                 }
                 case (2) -> {
                     if (result != null)
-                        System.out.println("Метод правых треугольников отработал за " + result.getN()
-                                + " разбиений с результатом " + result.getRes());
+                        System.out.println("РњРµС‚РѕРґ РїСЂР°РІС‹С… РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРѕРІ РѕС‚СЂР°Р±РѕС‚Р°Р» Р·Р° " + result.getN()
+                                + " СЂР°Р·Р±РёРµРЅРёР№ СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј " + result.getRes());
                 }
                 case (3) -> {
                     if (result != null)
-                        System.out.println("Метод средних треугольников отработал за " + result.getN()
-                                + " разбиений с результатом " + result.getRes());
+                        System.out.println("РњРµС‚РѕРґ СЃСЂРµРґРЅРёС… РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРѕРІ РѕС‚СЂР°Р±РѕС‚Р°Р» Р·Р° " + result.getN()
+                                + " СЂР°Р·Р±РёРµРЅРёР№ СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј " + result.getRes());
                 }
             }
         } else if (numberOfMethod == 2) {
             if (result != null)
-                System.out.println("Метод трапеций отработал за " + result.getN()
-                        + " разбиений с результатом " + result.getRes());
+                System.out.println("РњРµС‚РѕРґ С‚СЂР°РїРµС†РёР№ РѕС‚СЂР°Р±РѕС‚Р°Р» Р·Р° " + result.getN()
+                        + " СЂР°Р·Р±РёРµРЅРёР№ СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј " + result.getRes());
         } else {
             if (result != null)
-                System.out.println("Метод Симпсона отработал за " + result.getN()
-                        + " разбиений с результатом " + result.getRes());
+                System.out.println("РњРµС‚РѕРґ РЎРёРјРїСЃРѕРЅР° РѕС‚СЂР°Р±РѕС‚Р°Р» Р·Р° " + result.getN()
+                        + " СЂР°Р·Р±РёРµРЅРёР№ СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј " + result.getRes());
         }
     }
 }

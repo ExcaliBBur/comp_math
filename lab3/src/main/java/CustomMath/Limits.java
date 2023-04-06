@@ -52,7 +52,7 @@ public class Limits {
         DecimalFormat df = new DecimalFormat("#.##");
         for (double i = left + 0.01; i < right; i += 0.01) {
             if (limit(expression, Double.parseDouble(df.format(i).replace(",", ".")),
-                    "Ôóíêöèÿ òåðïèò ðàçðûâ íà èíòåðâàëå â òî÷êå " + df.format(i)) == null)
+                    "Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ñ‚ÐµÑ€Ð¿Ð¸Ñ‚ Ñ€Ð°Ð·Ñ€Ñ‹Ð² Ð½Ð° Ð¸Ð½Ñ‚ÐµÑ€Ð²Ð°Ð»Ðµ Ð² Ñ‚Ð¾Ñ‡ÐºÐµ " + df.format(i)) == null)
                 return Double.parseDouble(df.format(i).replace(",", "."));
 
         }
