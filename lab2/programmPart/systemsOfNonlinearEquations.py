@@ -19,9 +19,13 @@ def firstPrivateDiff(equation, symbol):
     return diff(equation, symbol)
 
 
-def getPlot(coordX, coordY):
-    plot1 = plot_implicit(system[0], aspect_ratio=(1, 1), show=False, line_color="blue",
-                          markers=[{'args': [coordX, coordY], 'color': "black", 'marker': "o", 'ms': 5}], )
+def getPlot(coordX, coordY, isRoot):
+    if (isRoot):
+        plot1 = plot_implicit(system[0], aspect_ratio=(1, 1), show=False, line_color="blue",
+                          markers=[{'args': [coordX, coordY], 'color': "black", 'marker': "o", 'ms': 5}] )
+    else:
+        plot1 = plot_implicit(system[0], aspect_ratio=(1, 1), show=False, line_color="blue")
+        
     plot2 = plot_implicit(system[1], aspect_ratio=(1, 1), 
                           show=False, line_color="red")
     plot1.append(plot2[0])
@@ -66,6 +70,8 @@ def getInputData():
         except ValueError:
             print("\nВведено неправильное значение, выберите систему от 1 до 4\n")
 
+    getPlot(0, 0, false)
+    
     print("\nВведите два начальных приближения через пробел: ")
 
     while (True):
@@ -126,7 +132,7 @@ def newtonMethod():
     r1 = abs(float(system[0].subs([(x, x_0), (y, y_0)])))
     r2 = abs(float(system[1].subs([(x, x_0), (y, y_0)])))
     print("Вектор невязок: r1 =", r1, "; r2 =", r2)
-    getPlot(x_0, y_0)
+    getPlot(x_0, y_0, true)
 
 
 getInputData()
