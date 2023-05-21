@@ -134,6 +134,7 @@ def miln(h, interval, result, epsilon, equation, accurate):
     f.append(result[2][1])
     f.append(result[3][1])
     
+    maxEps = -10**6
     x_0 = interval[0]
     x_n = interval[-1]
     counter = 4
@@ -161,11 +162,13 @@ def miln(h, interval, result, epsilon, equation, accurate):
         y.append(y_corr)
         f.append(f_corr)
         acc = (accurate.subs([('x', i), ('y', y_corr)]))
+        maxEps = max(maxEps, abs(y_corr - acc))
         results.append((i, y_corr))
         row = [counter, round(i, 3), round(y_corr, 3), round(f_corr, 3), round(acc, 3)]
         counter += 1
         table.add_row(row)
     print(table)
+    print("\nМаксимальная погрешность maxEps = %0.2f" % (maxEps))
     return results
     
 def getInputDataFromConsole():
