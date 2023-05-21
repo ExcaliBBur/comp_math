@@ -30,7 +30,11 @@ def getAccurate(number, x_0, y_0):
             c = -y_0 * x_0
             equation = -c / x
         case 2:
-            c = y_0 / x_0
+            try:
+                c = y_0 / x_0
+            except ZeroDivisionError:
+                print("\nНедопустимый интервал, выберите другой")
+                sys.exit(0)
             equation = c * x
         case 3:
             c = y_0 / exp(-2 * x_0)
@@ -51,11 +55,11 @@ def euler(equation, y_0, h, interval, accurate, epsilon):
         y_2 = y_0
         p = 2
         if (i != x_0):
-            f = equation.subs([('x', i / p), ('y', y_0)])
+            f = equation.subs([('x', i), ('y', y_2)])
             y_2 = y_0 + h / p * f
             while (not runge(y_1, y_2, p, epsilon)):
                 p *= 2
-                f = equation.subs([('x', i / p), ('y', y_0)])
+                f = equation.subs([('x', i), ('y', y_2)])
                 y_2 = y_0 + h / p * f
         
         row = [counter, round(i, 3), round(y_2, 3), round(
@@ -87,23 +91,23 @@ def runge_kutt(equation, y_0, h, interval, accurate, epsilon):
         f = equation.subs([('x', i), ('y', y_0)])
         y_2 = y_0
         p = 2
-        # if (i != x_0):
-        #     f = equation.subs([('x', i), ('y', y_2)])
-        #     k1, k2, k3, k4 = getK(equation, i / p, h / p, y_0)
-        #     y_2 = y_0 + 1 / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+        if (i != x_0):
+            f = equation.subs([('x', i), ('y', y_2)])
+            k1, k2, k3, k4 = getK(equation, i / p, h / p, y_2)
+            y_2 = y_0 + 1 / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
             
-        #     while (not runge(y_1, y_2, p, epsilon)):
-        #         p *= 2
-        #         f = equation.subs([('x', i), ('y', y_2)])
-        #         k1, k2, k3, k4 = getK(equation, i / p, h / p, y_0)
-        #         y_2 = y_0 + 1 / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+            while (not runge(y_1, y_2, p, epsilon)):
+                p *= 2
+                f = equation.subs([('x', i), ('y', y_2)])
+                k1, k2, k3, k4 = getK(equation, i / p, h / p, y_2)
+                y_2 = y_0 + 1 / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
                 
-        acc = (accurate.subs([('x', i), ('y', y_0)]))
+        acc = (accurate.subs([('x', i), ('y', y_2)]))
 
-        row = [counter, round(i, 3), round(y_0, 3), round(k1, 3), round(k2, 3), round(k3, 3), round(k4, 3), round(f, 3),
+        row = [counter, round(i, 3), round(y_2, 3), round(k1, 3), round(k2, 3), round(k3, 3), round(k4, 3), round(f, 3),
         round(acc, 3)]
-        result.append((y_0, f))
-        results.append((i, y_0))
+        result.append((y_2, f))
+        results.append((i, y_2))
         table.add_row(row)
         counter += 1
         y_0 = y_1
@@ -162,7 +166,6 @@ def miln(h, interval, result, epsilon, equation, accurate):
         counter += 1
         table.add_row(row)
     print(table)
-    print(results)
     return results
     
 def getInputDataFromConsole():
@@ -209,9 +212,7 @@ def main():
     
     print("Эйлер: ")
     dotsEuler = euler(equation, y_0, h, interval, accurate, epsilon)
-    
-    print(dotsEuler)
-    
+        
     print("Рунге-Кутт: ")
     result, dotsRunge_kutt = runge_kutt(equation, y_0, h, interval, accurate, epsilon)
     
@@ -221,4 +222,3 @@ def main():
     getPlot(accurate, dotsEuler, dotsRunge_kutt, dotsMiln)
         
 main()
-
