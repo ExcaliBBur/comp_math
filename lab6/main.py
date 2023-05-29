@@ -49,19 +49,19 @@ def euler(equation, y_0, h, interval, accurate, epsilon):
     table = [['№', 'x_i', 'y_i', 'f(x_i, y_i)', 'Точное решение']]
     table = PrettyTable(table[0])
     counter = 0
+    y_0tmp = y_0
     for i in np.arange(x_0, x_n + 0.001, h):
         f = equation.subs([('x', i), ('y', y_0)])
         y_1 = y_0 + h * f
         y_2 = y_0
         p = 2
         if (i != x_0):
-            f = equation.subs([('x', i), ('y', y_2)])
-            y_2 = y_0 + h / p * f
-            while (not runge(y_1, y_2, p, epsilon)):
+            y_2 = cycle(y_0tmp, h, p, i - h, equation)
+            while (not runge(y_0, y_2, p, epsilon)):
                 p *= 2
-                f = equation.subs([('x', i), ('y', y_2)])
-                y_2 = y_0 + h / p * f
-        
+                y_2 = cycle(y_0tmp, h, p, i - h, equation)
+            y_0tmp = y_2
+    
         row = [counter, round(i, 3), round(y_2, 3), round(
             f, 3), round(accurate.subs([('x', i), ('y', y_2)]), 3)]
         table.add_row(row)
@@ -71,6 +71,14 @@ def euler(equation, y_0, h, interval, accurate, epsilon):
 
     print(table)
     return results
+
+def cycle(y_0, h, p, i, equation):
+    for j in np.arange(i, i + h + 0.0000001, h / p):
+        f = equation.subs([('x', j), ('y', y_0)])
+        y_2 = y_0 + h / p * f
+        if (abs(j - i - h) <= 0.0000001):
+            return y_0
+        y_0 = y_2
 
 def runge(y_1, y_2, p, epsilon):
     return (abs(y_1 - y_2)) / (2**p - 1) <= epsilon
