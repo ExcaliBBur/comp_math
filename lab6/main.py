@@ -43,6 +43,14 @@ def getAccurate(number, x_0, y_0):
 
 
 def euler(equation, y_0, h, interval, accurate, epsilon):
+    def cycle(y_0, h, p, i, equation):
+        for j in np.arange(i, i + h + 0.0000001, h / p):
+            f = equation.subs([('x', j), ('y', y_0)])
+            y_2 = y_0 + h / p * f
+            if (abs(j - i - h) <= 0.001):
+                return y_0
+            y_0 = y_2
+            
     x_0 = interval[0]
     x_n = interval[-1]
     results = []
@@ -57,10 +65,12 @@ def euler(equation, y_0, h, interval, accurate, epsilon):
         p = 2
         if (i != x_0):
             y_2 = cycle(y_0tmp, h, p, i - h, equation)
+            f = equation.subs([('x', i), ('y', y_2)])
             while (not runge(y_0, y_2, p, epsilon)):
                 p *= 2
                 y_2 = cycle(y_0tmp, h, p, i - h, equation)
             y_0tmp = y_2
+            f = equation.subs([('x', i), ('y', y_2)])
     
         row = [counter, round(i, 3), round(y_2, 3), round(
             f, 3), round(accurate.subs([('x', i), ('y', y_2)]), 3)]
@@ -72,18 +82,18 @@ def euler(equation, y_0, h, interval, accurate, epsilon):
     print(table)
     return results
 
-def cycle(y_0, h, p, i, equation):
-    for j in np.arange(i, i + h + 0.0000001, h / p):
-        f = equation.subs([('x', j), ('y', y_0)])
-        y_2 = y_0 + h / p * f
-        if (abs(j - i - h) <= 0.0000001):
-            return y_0
-        y_0 = y_2
-
 def runge(y_1, y_2, p, epsilon):
     return (abs(y_1 - y_2)) / (2**p - 1) <= epsilon
 
 def runge_kutt(equation, y_0, h, interval, accurate, epsilon):
+    def cycle(y_0, h, p, i, equation):
+        for j in np.arange(i, i + h + 0.0000001, h / p):
+            k1, k2, k3, k4 = getK(equation, j, h / p, y_0)
+            y_2 = y_0 + 1 / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+            if (abs(j - i - h) <= 0.001):
+                return y_0
+            y_0 = y_2
+        
     x_0 = interval[0]
     x_n = interval[-1]
     table = [['№', 'x_i', 'y_i', 'k1', 'k2', 'k3',
@@ -92,6 +102,7 @@ def runge_kutt(equation, y_0, h, interval, accurate, epsilon):
     counter = 0
     results = [] # for plot
     result = [] # for miln
+    y_0tmp = y_0
     for i in np.arange(x_0, x_n + 0.001, h):
         k1, k2, k3, k4 = getK(equation, i, h, y_0)
 
@@ -100,15 +111,13 @@ def runge_kutt(equation, y_0, h, interval, accurate, epsilon):
         y_2 = y_0
         p = 2
         if (i != x_0):
+            y_2 = cycle(y_0tmp, h, p, i - h, equation)
             f = equation.subs([('x', i), ('y', y_2)])
-            k1, k2, k3, k4 = getK(equation, i / p, h / p, y_2)
-            y_2 = y_0 + 1 / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
-            
-            while (not runge(y_1, y_2, p, epsilon)):
+            while (not runge(y_0, y_2, p, epsilon)):
                 p *= 2
-                f = equation.subs([('x', i), ('y', y_2)])
-                k1, k2, k3, k4 = getK(equation, i / p, h / p, y_2)
-                y_2 = y_0 + 1 / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+                y_2 = cycle(y_0tmp, h, p, i - h, equation)
+            y_0tmp = y_2
+            f = equation.subs([('x', i), ('y', y_2)])
                 
         acc = (accurate.subs([('x', i), ('y', y_2)]))
 
