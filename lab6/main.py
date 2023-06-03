@@ -161,20 +161,21 @@ def runge_kutt_for_miln(equation, y_0, h, interval, maxP):
 def miln(h, interval, result, equation, accurate, y, f, maxP, epsilon):
     def cycle(h, p, i):
         y_ret, f_ret = 0, 0
-        for j in np.arange(i, i + h + 0.0000001, h / p):
+        for j in np.arange(i, i + h, h / p):
             y_progn = y[-4] + 4 * h / p / 3 * (2 * f[-3] - f[-2] + 2 * f[-1])
             f_progn = equation.subs([('x', j), ('y', y_progn)])
             y_corr = y[-2] + h / p / 3 * (f[-2] + 4 * f[-1] + f_progn)
             
             f_corr = equation.subs([('x', j), ('y', y_corr)])
-            if (j == i):
-                while (abs(y_corr - y_progn) >= epsilon):
+            while (abs(y_corr - y_progn) >= epsilon):
                     y_progn = y_corr
                     f_progn = equation.subs([('x', j), ('y', y_progn)])
                     y_corr = y[-2] + h / p / 3 * (f[-2] + 4 * f[-1] + f_progn)
                     f_corr = equation.subs([('x', j), ('y', y_corr)])
                     
+            if (j == i):
                 y_ret, f_ret = y_corr, f_corr
+                
             y.append(y_corr)
             f.append(f_corr)
         return y_ret, f_ret
