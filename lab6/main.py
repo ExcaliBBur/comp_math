@@ -54,7 +54,7 @@ def euler(equation, y_0, h, interval, accurate, epsilon):
     x_0 = interval[0]
     x_n = interval[-1]
     results = []
-    table = [['№', 'x_i', 'y_i', 'f(x_i, y_i)', 'Точное решение']]
+    table = [['№', 'x_i', 'y_i', 'f(x_i, y_i)', 'Точное решение', 'Деление шага']]
     table = PrettyTable(table[0])
     counter = 0
     y_0tmp = y_0
@@ -73,7 +73,7 @@ def euler(equation, y_0, h, interval, accurate, epsilon):
             f = equation.subs([('x', i), ('y', y_2)])
     
         row = [counter, round(i, 3), round(y_2, 3), round(
-            f, 3), round(accurate.subs([('x', i), ('y', y_2)]), 3)]
+            f, 3), round(accurate.subs([('x', i), ('y', y_2)]), 3), p]
         table.add_row(row)
         results.append((i, y_2))
         counter += 1
@@ -97,11 +97,11 @@ def runge_kutt(equation, y_0, h, interval, accurate, epsilon):
     x_0 = interval[0]
     x_n = interval[-1]
     table = [['№', 'x_i', 'y_i', 'k1', 'k2', 'k3',
-        'k4', 'f(x_i, y_i)', 'Точное решение']]
+        'k4', 'f(x_i, y_i)', 'Точное решение', 'Деление шага']]
     table = PrettyTable(table[0])
     counter = 0
     results = [] # for plot
-    result = [] # for miln
+    p_miln = []
     y_0tmp = y_0
     for i in np.arange(x_0, x_n + 0.001, h):
         k1, k2, k3, k4 = getK(equation, i, h, y_0)
@@ -109,8 +109,9 @@ def runge_kutt(equation, y_0, h, interval, accurate, epsilon):
         y_1 = y_0 + 1 / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
         f = equation.subs([('x', i), ('y', y_0)])
         y_2 = y_0
-        p = 2
+        p = 1
         if (i != x_0):
+            p = 2
             y_2 = cycle(y_0tmp, h, p, i - h, equation)
             f = equation.subs([('x', i), ('y', y_2)])
             while (not runge(y_0, y_2, p, epsilon)):
@@ -118,19 +119,19 @@ def runge_kutt(equation, y_0, h, interval, accurate, epsilon):
                 y_2 = cycle(y_0tmp, h, p, i - h, equation)
             y_0tmp = y_2
             f = equation.subs([('x', i), ('y', y_2)])
-                
+        
+        p_miln.append(p) 
         acc = (accurate.subs([('x', i), ('y', y_2)]))
 
         row = [counter, round(i, 3), round(y_2, 3), round(k1, 3), round(k2, 3), round(k3, 3), round(k4, 3), round(f, 3),
-        round(acc, 3)]
-        result.append((y_2, f))
+        round(acc, 3), p]
         results.append((i, y_2))
         table.add_row(row)
         counter += 1
         y_0 = y_1
-
+        
     print(table)
-    return result, results
+    return results, p_miln
 
 def getK(equation, i, h, y_0):
     k1 = h * equation.subs([('x', i), ('y', y_0)])
@@ -139,17 +140,58 @@ def getK(equation, i, h, y_0):
     k4 = h * equation.subs([('x', i + h), ('y', y_0 + k3)])
     return k1, k2, k3, k4
 
-def miln(h, interval, result, epsilon, equation, accurate):
-    y, f = [], []
-    y.append(result[0][0])
-    y.append(result[1][0])
-    y.append(result[2][0])
-    y.append(result[3][0])
+def runge_kutt_for_miln(equation, y_0, h, interval, p_miln):
+    def cycle(y_0, h, p, i, equation):
+        for j in np.arange(i, i + h + 0.0000001, h / p):
+            k1, k2, k3, k4 = getK(equation, j, h / p, y_0)
+            y_2 = y_0 + 1 / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+            y_miln[j] = y_0
+            f_miln[j] = equation.subs([('x', j), ('y', y_0)])
+            if (abs(j - i - h) <= 0.001):
+                return y_0
+            y_0 = y_2
+        
+    x_0 = interval[0]
+    x_n = interval[-1]
+    counter = 0
     
-    f.append(result[0][1])
-    f.append(result[1][1])
-    f.append(result[2][1])
-    f.append(result[3][1])
+    y_miln = {}
+    f_miln = {}
+    print(p_miln)
+    for i in np.arange(x_0, x_n + 0.001, h):
+        
+        y_miln[i] = y_0
+        f_miln[i] = equation.subs([('x', i), ('y', y_0)])
+        y_2 = y_0
+        if (i != x_0):
+            p = p_miln[counter]
+            y_2 = cycle(y_0, h, p, i - h, equation)
+        
+        counter += 1
+        y_0 = y_2
+        
+    return y_miln, f_miln
+
+def miln(h, interval, equation, accurate, y, f, p_miln):
+    def cycle(h, p, i):
+        y_sum = 0
+        f_sum = 0
+        for j in np.arange(i, i + h + 0.0000001, h / p):
+            y_progn = y[j - (4 * h)] + 4 * h / 3 * (2 * f[j - (3 * h)] - f[j - (2 * h)] + 2 * f[j - (1 * h)])
+            f_progn = equation.subs([('x', j), ('y', y_progn)])
+            y_corr = y[j - (2 * h)] + h / 3 * (f[j - (2 * h)] + 4 * f[j - (1 * h)] + f_progn)
+            
+            f_corr = equation.subs([('x', j), ('y', y_corr)])
+            y_sum += y_corr
+            f_sum += f_corr
+            y[j] = y_corr
+            f[j] = f_corr
+            print("index: ", j - (4 * h))
+            print(y_progn, f_progn)
+            print(j, y_corr, f_corr)
+        print()
+        return y_sum / (p + 1), f_corr / (p + 1)
+
     
     maxEps = -10**6
     x_0 = interval[0]
@@ -159,31 +201,21 @@ def miln(h, interval, result, epsilon, equation, accurate):
     table = PrettyTable(table[0])
     results = []
     for i in range(4):
-        table.add_row([i, round(x_0 + h * i, 3), round(y[i], 3), round(f[i], 3), 
-                       round(accurate.subs([('x', x_0 + h * i), ('y', y[i])]), 3)])
-        results.append((x_0 + h * i, y[i]))
+        table.add_row([i, float(round(x_0 + h * i, 3)), round(y[x_0 + h * i], 3), round(f[x_0 + h * i], 3), 
+                       round(accurate.subs([('x', x_0 + h * i), ('y', y[x_0 + h * i])]), 3)])
+        results.append((x_0 + h * i, y[x_0 + h * i]))
 
     for i in np.arange(x_0 + h * 4, x_n + 0.001, h):
-        y_progn = y[counter - 4] + 4 * h / 3 * (2 * f[counter - 3] - f[counter - 2] + 2 * f[counter - 1])
-        f_progn = equation.subs([('x', i), ('y', y_progn)])
-        y_corr = y[counter - 2] + h / 3 * (f[counter - 2] + 4 * f[counter - 1] + f_progn)
-        f_corr = equation.subs([('x', i), ('y', y_corr)])
-        
-        if (i != x_0 + h * 4):
-            while (abs(y_corr - y_progn) >= epsilon):
-                y_progn = y_corr
-                f_progn = equation.subs([('x', i), ('y', y_progn)])
-                y_corr = y[counter - 2] + h / 3 * (f[counter - 2] + 4 * f[counter - 1] + f_progn)
-                f_corr = equation.subs([('x', i), ('y', y_corr)])
-        
-        y.append(y_corr)
-        f.append(f_corr)
+        print("i: ", i)
+        y_corr, f_corr = cycle(h, p_miln[int(i) - h], i)
+
         acc = (accurate.subs([('x', i), ('y', y_corr)]))
         maxEps = max(maxEps, abs(y_corr - acc))
         results.append((i, y_corr))
         row = [counter, round(i, 3), round(y_corr, 3), round(f_corr, 3), round(acc, 3)]
         counter += 1
         table.add_row(row)
+        
     print(table)
     print("\nМаксимальная погрешность maxEps = %0.2f" % (maxEps))
     return results
@@ -225,7 +257,8 @@ def getPlot(accurate, dotsEuler, dotsRunge_kutt, dotsMiln):
 
 
 def main():
-    number, y_0, interval, h, epsilon = getInputDataFromConsole()
+    # number, y_0, interval, h, epsilon = getInputDataFromConsole()
+    number, y_0, interval, h, epsilon = 1, -1, [1, 10], 1, 0.001
     
     equation = getEquation(number)
     accurate = getAccurate(number, interval[0], y_0)
@@ -234,11 +267,13 @@ def main():
     dotsEuler = euler(equation, y_0, h, interval, accurate, epsilon)
         
     print("Рунге-Кутт: ")
-    result, dotsRunge_kutt = runge_kutt(equation, y_0, h, interval, accurate, epsilon)
+    dotsRunge_kutt, p = runge_kutt(equation, y_0, h, interval, accurate, epsilon)
+    
+    y, f = runge_kutt_for_miln(equation, y_0, h, interval, p)
     
     print('Метод Милна: ')
-    dotsMiln = miln(h, interval, result, epsilon, equation, accurate)
+    dotsMiln = miln(h, interval, equation, accurate, y, f, p)
     
-    getPlot(accurate, dotsEuler, dotsRunge_kutt, dotsMiln)
+    # getPlot(accurate, dotsEuler, dotsRunge_kutt, dotsMiln)
         
 main()
